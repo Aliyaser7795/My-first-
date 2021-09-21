@@ -10,19 +10,13 @@ using Volo.Abp.Domain.Repositories;
 
 namespace FirstTest.Books
 {
-    public class BookAppService :
-        CrudAppService<
-            Book, //The Book entity
-            BookDto, //Used to show books
-            Guid, //Primary key of the book entity
-            PagedAndSortedResultRequestDto, //Used for paging/sorting
-            CreateBookDto>, //Used to create/update a book
-        IBookAppService //implement the IBookAppService
+    public class BookAppService : ApplicationService, IBookAppService
     {
-        public BookAppService(IRepository<Book, Guid> repository)
-            : base(repository)
+        private readonly IBookRepository _BookRepository;
+        public virtual async Task<BookDto> GetAsync(Guid id)
         {
-
+            return ObjectMapper.Map<Book, BookDto>(await _BookRepository.GetAsync(id));
         }
     }
+
 }
